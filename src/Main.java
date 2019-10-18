@@ -17,7 +17,7 @@ public class Main {
     private static final int samplesPerPixel = 10;
     private static final int numBounces = 5;
     private static final double rayBounceEps = 0.001;
-    private static final Vector rayMissColor = new Vector(50.0, 50.0, 50.0);
+    private static final Vector rayMissColor = new Vector(100.0, 100.0, 100.0);
 
     private static final Vector cameraPos = new Vector(0.0,0.0, -10.0);
     private static final Vector cameraLookAt = new Vector(0.0, 0.0, 0.0);

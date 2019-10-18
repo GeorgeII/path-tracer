@@ -37,7 +37,7 @@ public class Quad {
             u *= denom;
             v *= denom;
             w *= denom;
-            r = this.a.multiply(u).add(this.b.multiply(b)).add(this.c.multiply(w));
+            r = this.a.multiply(u).add(this.b.multiply(v)).add(this.c.multiply(w));
         }
         else {
             Vector pd = this.d.substract(rayPos);
@@ -63,14 +63,14 @@ public class Quad {
             normal.multiply(-1.0);
 
         double t = -1.0;
-        if (Math.abs(rayDir.getX()) > 0.0) {
-            t = (r.getX() - rayPos.getX()) / rayDir.getX();
+        if (Math.abs(rayDir.x) > 0.0) {
+            t = (r.x - rayPos.x) / rayDir.x;
         }
-        else if (Math.abs(rayDir.getY()) > 0.0) {
-            t = (r.getY() - rayPos.getY()) / rayDir.getY();
+        else if (Math.abs(rayDir.y) > 0.0) {
+            t = (r.y - rayPos.y) / rayDir.y;
         }
-        else if (Math.abs(rayDir.getZ()) > 0.0) {
-            t = (r.getZ() - rayPos.getZ()) / rayDir.getZ();
+        else if (Math.abs(rayDir.z) > 0.0) {
+            t = (r.z - rayPos.z) / rayDir.z;
         }
 
         if (t < 0.0)
