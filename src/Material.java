@@ -1,6 +1,6 @@
 public class Material {
-    private Vector emissive;
-    private Vector diffuse;
+    Vector emissive;
+    Vector diffuse;
 
     public Material(Vector emissive, Vector diffuse) {
         this.emissive = emissive;
@@ -8,7 +8,7 @@ public class Material {
     }
 
     public Vector getEmissive() {
-        return emissive;
+        return this.emissive;
     }
 
     public void setEmissive(Vector emissive) {
@@ -16,7 +16,7 @@ public class Material {
     }
 
     public Vector getDiffuse() {
-        return diffuse;
+        return this.diffuse;
     }
 
     public void setDiffuse(Vector diffuse) {

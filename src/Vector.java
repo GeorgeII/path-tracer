@@ -1,5 +1,8 @@
 import java.util.Random;
 
+/**
+ * Used as pixel, diffuse and emissive.
+ */
 public class Vector {
     public double x;
     public double y;
@@ -77,7 +80,7 @@ public class Vector {
         double r2s = Math.sqrt(r2);
 
         Vector u;
-        if (Math.abs(x) > 0.1) {
+        if (Math.abs(this.x) > 0.1) {
             u = new Vector(0.0, 1.0, 0.0).crossProduct(this);
         }
         else {
@@ -86,7 +89,7 @@ public class Vector {
 
         u = u.normalize();
         Vector v = this.crossProduct(u);
-        Vector d = u.multiply(Math.cos(r1)*r2s).add(v.multiply(Math.sin(r1)*r2s)).add(this.multiply(Math.sqrt(1-r2)));
+        Vector d = u.multiply(Math.cos(r1) * r2s).add(v.multiply(Math.sin(r1) * r2s)).add(this.multiply(Math.sqrt(1 - r2)));
         d = d.normalize();
 
         return d;

@@ -16,9 +16,9 @@ public class Quad {
     }
 
     public boolean isIntersect(Vector rayPos, Vector rayDir, RayHitInfo info) {
-        Vector pa = this.a.substract(rayPos);
-        Vector pb = this.b.substract(rayPos);
-        Vector pc = this.c.substract(rayPos);
+        Vector pa = (this.a).substract(rayPos);
+        Vector pb = (this.b).substract(rayPos);
+        Vector pc = (this.c).substract(rayPos);
 
         Vector m = pc.crossProduct(rayDir);
         Vector r;
@@ -37,10 +37,10 @@ public class Quad {
             u *= denom;
             v *= denom;
             w *= denom;
-            r = this.a.multiply(u).add(this.b.multiply(v)).add(this.c.multiply(w));
+            r = (this.a).multiply(u).add((this.b).multiply(v)).add((this.c).multiply(w));
         }
         else {
-            Vector pd = this.d.substract(rayPos);
+            Vector pd = (this.d).substract(rayPos);
             double u = pd.dotProduct(m);
             if (u < 0.0)
                 return false;
@@ -55,14 +55,14 @@ public class Quad {
             u *= denom;
             v *= denom;
             w *= denom;
-            r = this.a.multiply(u).add(this.d.multiply(v)).add(this.c.multiply(w));
+            r = (this.a).multiply(u).add((this.d).multiply(v)).add((this.c).multiply(w));
         }
 
         Vector normal = this.normal;
-        if (this.normal.dotProduct(rayDir) > 0)
-            normal.multiply(-1.0);
+        if ((this.normal).dotProduct(rayDir) > 0)
+            normal = normal.multiply(-1.0);
 
-        double t = -1.0;
+        double t = 0.0;
         if (Math.abs(rayDir.x) > 0.0) {
             t = (r.x - rayPos.x) / rayDir.x;
         }

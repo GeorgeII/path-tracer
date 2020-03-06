@@ -7,6 +7,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Choosing constants like image size, number of bounces, sample per pixel, threads number, etc.
+ * Also objects are set on the scene out here.
+ */
 public class Main {
     private static final int imageWidth = 512;
     private static final int imageHeight = 512;
@@ -14,14 +18,14 @@ public class Main {
     private static final double aspectRatio = (double)imageWidth / (double)imageHeight;
     private static List<Vector> pixels;
 
-    private static final int samplesPerPixel = 10;
-    private static final int numBounces = 5;
+    private static final int samplesPerPixel = 100;
+    private static final int numBounces = 10;
     private static final double rayBounceEps = 0.001;
-    private static final Vector rayMissColor = new Vector(100.0, 100.0, 100.0);
+    private static final Vector rayMissColor = new Vector(50, 50, 50);
 
     private static final Vector cameraPos = new Vector(0.0,0.0, -10.0);
     private static final Vector cameraLookAt = new Vector(0.0, 0.0, 0.0);
-    private static double nearPlaneDistance = 0.1;
+    private static final double nearPlaneDistance = 0.1;
     private static final double cameraVerticalFOV = 40.0 * Math.PI / 180.0;
     private static final double cameraHorizontalFOV = cameraVerticalFOV * aspectRatio;
     private static final double windowTop = Math.tan(cameraVerticalFOV / 2.0) * nearPlaneDistance;
@@ -40,6 +44,7 @@ public class Main {
             pixels.add(new Vector());
         }
 
+        // all the figures on the scene
         spheres = new ArrayList<>();
         quads = new ArrayList<>();
 
@@ -47,7 +52,7 @@ public class Main {
         spheres.add(new Sphere(
                 new Vector(4.0, 4.0, 6.0),
                 0.5,
-                new Vector(100.0, 100.0, 100.0),
+                new Vector(200.0, 200.0, 200.0),
                 new Vector(0.0, 0.0, 0.0)
                 )
         );
@@ -82,6 +87,17 @@ public class Main {
                 new Vector(0.9, 0.1, 0.1)
                 )
         );
+
+        // back black wall
+        quads.add(new Quad(
+                new Vector(-500.0,   -500.0, 20),
+                new Vector(-500.0,   500.0, 20),
+                new Vector(500.0, 500, 20),
+                new Vector(500.0, -500, 20),
+                new Vector(0.0, 0.0, 0.0),
+                new Vector(0.0, 0.0, 0.0)
+                )
+        );
     }
 
     private boolean closestIntersection(Vector rayPos, Vector rayDir, RayHitInfo info) {
@@ -96,24 +112,22 @@ public class Main {
         return ret;
     }
 
-
-
     private Vector L_out(RayHitInfo info, Vector outDir, int bouncesLeft) {
         if (bouncesLeft == 0)
             return rayMissColor;
 
-        final Material material = info.getMaterial();
+        Material material = info.getMaterial();
 
-        Vector ret = material.getEmissive();
+        Vector ret = material.emissive;
 
         // add random samples
         Vector newRayDir = info.getSurfaceNormal().cosineSampleHemisphere();
         RayHitInfo newRayInfo = new RayHitInfo(); // ??? debatable decision ???
         if (closestIntersection(info.getIntersectionPoint().add(newRayDir.multiply(rayBounceEps)), newRayDir, newRayInfo)) {
-            ret = ret.add(L_out(newRayInfo, newRayDir.inverse(), bouncesLeft-1).multiply(material.getDiffuse()));
+            ret = ret.add(L_out(newRayInfo, newRayDir.inverse(), bouncesLeft-1).multiply(material.diffuse));
         }
         else {
-            ret = ret.add(rayMissColor.multiply(material.getDiffuse()));
+            ret = ret.add(rayMissColor.multiply(material.diffuse));
         }
 
         //System.out.println(ret.x + " " + ret.y + " " + ret.z);
@@ -156,6 +170,8 @@ public class Main {
             outPixels.add(new Vector());
         }
 
+        // gamma correction to make image brighter. It does not work at the moment
+        /*
         for (int i = 0; i < numPixels; i++) {
             Vector src = pixels.get(i);
             Vector dest = outPixels.get(i);
@@ -173,9 +189,7 @@ public class Main {
             dest.y = (int) clamp(correctedPixel.y * 255.0, 0.0, 255.0);
             dest.z = (int) clamp(correctedPixel.x * 255.0, 0.0, 255.0);
         }
-
-
-
+        */
 
         for (int x = 0; x < imageHeight; x++) {
 
@@ -205,7 +219,6 @@ public class Main {
             System.out.println(pixel.x + " " + pixel.y + " " + pixel.z);
         }
 
-
         BufferedImage img = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB);
 
         Collections.reverse(outPixels);
@@ -222,9 +235,6 @@ public class Main {
             //System.out.println(tmp);
         }
 
-
-
-
         File fileFromString = new File(file);
         try {
             ImageIO.write(img, "bmp", fileFromString);
@@ -238,9 +248,8 @@ public class Main {
     public static void main(String[] args) {
         initializeScenes();
 
-        String file = "src/test.bmp";
+        String file = "images/scene.bmp";
         Main main = new Main();
         main.saveImage(file);
-
     }
 }

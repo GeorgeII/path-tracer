@@ -6,6 +6,8 @@ public class RayHitInfo {
 
     public RayHitInfo() {
         material = null;
+        surfaceNormal = null;
+        intersectionPoint = null;
         collisionTime = -1.0;
     }
 
